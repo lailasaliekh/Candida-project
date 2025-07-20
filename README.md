@@ -5,12 +5,12 @@ A C++ simulation framework for modeling spatial organisation of Candida (yeast) 
 ## Table of Contents
 
 - [About](#about)
-- [Force Models](#force-models) 
 - [Building](#building)  
 - [Running Simulations](#running-simulations)    
 - [Slurm Scripts](#slurm-scripts)
 - [Parameters](#parameters)
-- [Project Structure](#project-structure)  
+- [Force Models](#force-models) 
+- [Simulation Structure](#simulation-structure)  
 
 ---
 
