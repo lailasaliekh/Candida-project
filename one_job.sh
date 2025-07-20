@@ -8,7 +8,7 @@
 #SBATCH --mem=32GB
 
 export OMP_NUM_THREADS="16"
-ulimit -c unlimited
+ulimit -c unlimited # this is for debugging if needed
 
 # Get the repeat index from the argument
 REPEAT_INDEX=$1
@@ -23,4 +23,4 @@ REPEAT_DIR="/data_production/VERTICAL_ORI/CA${NUM_CA}_PA${NUM_PA}/repeat${REPEAT
 # Create the directory for the repeat
 mkdir -p "$REPEAT_DIR"
 
-"${BASE_DIR}/main.out" "${REPEAT_DIR}" 1 2 0 1 1 4 2e-4 "${NUM_CA}" "${NUM_PA}"
+"${BASE_DIR}/main.out" "${REPEAT_DIR}"
