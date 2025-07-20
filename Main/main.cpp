@@ -53,7 +53,7 @@ std::vector<IBacterium*> initialiseBiofilm(double linking1, double linking2,
     double yMin=3;
     double normDistance = 4.5; // Minimum spacing
     double maxRadius = 73.0/1.17; // Max spread distance from center
-    int maxAttempts = 200; // Limit placement retries
+    int maxAttempts = 300; // Limit placement retries
 
     std::vector<std::pair<double, double>> positions; // Track placed positions
 
@@ -375,18 +375,9 @@ int main(int argc, char const *argv[])
     double linking2   { std::stod( argv[5]) }; 
     double force_thresh    { std::stod( argv[6]) }; // Threshold force before breaking
   }
-  else if ( argc==11 )
+  else if ( argc==2 )
   {
     run_dir = argv[1];                              // Run directory
-    double kappa           { std::stod( argv[2]) }; // Spring tension
-    double bend_rig        { std::stod( argv[3]) }; // Bending rigidity
-    double linking1   { std::stod( argv[4]) }; // Probability daughters link
-    double linking2  { std::stod( argv[5]) }; 
-    double force_thresh    { std::stod( argv[6]) }; // Threshold force before breaking
-    double aspect_ratio    { std::stod( argv[7]) }; // Division length of the bacterium
-    double growth_rate     { std::stod( argv[8]) }; // Growth rate
-    int num_A =std::stoi(argv[9]);    //number of Candida segments/cells
-    int num_B =std::stoi(argv[10]);    //number of pa segments/cells
   }
  // else
  // {
@@ -406,15 +397,17 @@ int main(int argc, char const *argv[])
   double centerX = 0.0;   // Shared center X for mixed distribution
   double centerY = 75.0/1.17;   // Shared center Y for mixed distribution
   
-  // std::vector<IBacterium*> bacteria_population = initialiseBiofilm(linking1, linking2, 
-  //                                                                   numTypeA, numTypeB, 
-  //                                                                   centerX, centerY);
 
-  //FROM FILE
+// well-mixed initial conditions
+  std::vector<IBacterium*> bacteria_population = initialiseBiofilm(linking1, linking2, 
+                                                                    numTypeA, numTypeB, 
+                                                                    centerX, centerY);
+
+  //FROM FILE for longer runs, reading from file
   std::string dataFilePath = "/storage/datastore-personal/s2507701/Leonado_paper/NewTestCAndida/GeneratedOutput/SimOutput/data_production/VERTICAL_ORI/CAm1_PA1/repeat1/biofilm_00107.dat"; // 
   
-  std::vector<IBacterium*> bacteria_population = initialiseBiofilmFromFile(linking1, linking2,dataFilePath);
-  // std::vector<IBacterium*> initial_conditions{ initialiseBiofilm(linking1, linking2) };
+  // std::vector<IBacterium*> bacteria_population = initialiseBiofilmFromFile(linking1, linking2,dataFilePath);
+
   PolyBiofilm pb { bacteria_population };
   pb.runSim();
 #else
