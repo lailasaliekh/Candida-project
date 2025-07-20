@@ -45,4 +45,25 @@ For loop submitting multiple repeats
 ```
 
 ## Parameters
+The initial number of cells of each type can be changed from the ```main.cpp``` file
+``` C++
+  int numTypeA = 1;      // Number of ca
+  int numTypeB = 1;      // Number of pa
+```
+To change the type of candida from hyphal to non-hyphal (yeast-locked), we simply change the linking probability in:
+Line 207 in ```main.cpp```
+``` C++
+            if (isTypeA) {
+                auto* rod = new RodShapedBacterium{
+                    3/1.17, 75/1.17, 0,  // x, y, z (z=0)
+                    constants::pi * 0.5, constants::pi * 0.5, // Random angle
+                    RodShapedBacterium::mAvgGrwthRate,
+                    4, // Type A property
+                  --->  1, // if hyphal ca, 0 if yeast-locked ca
+                    Candida::mRadius
+                };
+                initial_conditions.push_back(rod);
+                numTypeA--;
+            }
+```
 
