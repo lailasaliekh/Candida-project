@@ -31,7 +31,7 @@ Remember to recompile once changing the hard-coded parameters
 ## Running Simulation
 From the terminal 
 ```bash
-./Main/main.out <output_dir>
+.build/Main/main.out <output_dir>
 ```
 
 ## Slurm Scripts
