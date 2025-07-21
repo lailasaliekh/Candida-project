@@ -1,6 +1,7 @@
 # Candida Project
 
 A C++ simulation framework for modeling spatial organisation of Candida (yeast) and Pseudomonas(bacteria) in alveoili-like confined structures.
+https://www.biorxiv.org/content/10.1101/2025.03.22.644766v1
 
 ## Table of Contents
 
