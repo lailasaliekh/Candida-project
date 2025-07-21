@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name=CA1_PA1
-#SBATCH --output=/storage/datastore-personal/s2507701/Leonado_paper/NewTestCAndida/Simulation_CA_PA_copy1/log/CA1_PA1%j.txt
-#SBATCH --error=/storage/datastore-personal/s2507701/Leonado_paper/NewTestCAndida/Simulation_CA_PA_copy1/log/CA1_PA1%j.txt
+#SBATCH --output=/Candida-project-main/log/CA1_PA1%j.txt
+#SBATCH --error=/Candida-project-main/log/CA1_PA1%j.txt
 #SBATCH --partition=long
 #SBATCH --time=168:00:00
 #SBATCH --cpus-per-task=16
@@ -16,7 +16,7 @@ NUM_CA=1
 NUM_PA=1
 
 # Define directories
-BASE_DIR="/storage/datastore-personal/s2507701/Leonado_paper/NewTestCAndida/Simulation_CA_PA_copy1/build/Main"
+BASE_DIR="/Candida-project-main/build/Main"
 
 REPEAT_DIR="/data_production/VERTICAL_ORI/CA${NUM_CA}_PA${NUM_PA}/repeat${REPEAT_INDEX}/"
 
