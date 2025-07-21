@@ -47,7 +47,7 @@ std::vector<IBacterium*> initialiseBiofilm(double linking1, double linking2,
     std::srand(std::time(0));
 
     // Define wall constraints scaled by the diameter of PA Bacteria
-    double xMin = -73 / 1.17;
+    double xMin = -73 / 1.17; 
     double xMax = 73 / 1.17;
     double yMax = 147/ 1.17;
     double yMin=3;
@@ -56,79 +56,6 @@ std::vector<IBacterium*> initialiseBiofilm(double linking1, double linking2,
     int maxAttempts = 300; // Limit placement retries
 
     std::vector<std::pair<double, double>> positions; // Track placed positions
-
-    // auto generateMixedBacteria = [&](int totalCount) {
-    //     for (int i = 0; i < totalCount; ++i) {
-    //         bool validPosition = false;
-    //         double x, y;
-
-    //         int attempts = 0;
-    //         while (!validPosition && attempts < maxAttempts) {
-    //             // Generate polar coordinates (radius and angle) for mixing
-    //             double r = (std::rand() / (double)RAND_MAX) * maxRadius;  // Random radius
-    //             double theta = (std::rand() / (double)RAND_MAX) * 2 * constants::pi; // Random angle
-
-    //             // Convert polar to Cartesian
-    //             x = centerX + r * std::cos(theta);
-    //             y = centerY + r * std::sin(theta);
-
-    //             // Ensure x and y remain inside the walls
-    //             if (x < xMin) x = xMin + normDistance;
-    //             if (x > xMax) x = xMax - normDistance;
-    //             if (y > yMax) y = yMax - normDistance;
-
-    //             // Check for minimum separation from existing bacteria
-    //             validPosition = true;
-    //             for (const auto& pos : positions) {
-    //                 double dx = x - pos.first;
-    //                 double dy = y - pos.second;
-    //                 if (std::sqrt(dx * dx + dy * dy) < normDistance) {
-    //                     validPosition = false;
-    //                     break;
-    //                 }
-    //             }
-    //             attempts++;
-    //         }
-
-    //         if (attempts == maxAttempts) {
-    //             std::cerr << "Warning: Could not place all bacteria without overlap.\n";
-    //             break;
-    //         }
-
-    //         double angle = (std::rand() / (double)RAND_MAX) * 2 * constants::pi; // Random orientation
-
-    //         // **Interleave Type A and Type B**
-    //         bool isTypeA = (i % 2 == 0 && numTypeA > 0) || (numTypeB == 0); 
-    //         bool isTypeB = (i % 2 == 1 && numTypeB > 0) || (numTypeA == 0);
-
-    //         if (isTypeA) {
-    //             auto* rod = new RodShapedBacterium{
-    //                 x, y, 0,  // x, y, z (z=0)
-    //                 angle, constants::pi * 0.5, // Random angle
-    //                 RodShapedBacterium::mAvgGrwthRate,
-    //                 4, // Type A property
-    //                 1, 
-    //                 Candida::mRadius
-    //             };
-    //             initial_conditions.push_back(rod);
-    //             numTypeA--; 
-    //         } 
-    //         else if (isTypeB) {
-    //             auto* rod = new RodShapedBacterium{
-    //                 x, y, 0,  // x, y, z (z=0)
-    //                 angle, constants::pi * 0.5, // Random angle
-    //                 RodShapedBacterium::mAvgGrwthRate,
-    //                 3, // Type B property
-    //                 0,
-    //                 0.5
-    //             };
-    //             initial_conditions.push_back(rod);
-    //             numTypeB--; 
-    //         }
-
-    //         positions.push_back({x, y}); // Store the placed position
-    //     }
-    // };
 
     //--------------------------------------------------------
     //-----uniformly distribute cells/segments in the box-----
@@ -200,10 +127,11 @@ std::vector<IBacterium*> initialiseBiofilm(double linking1, double linking2,
     
             if (isTypeA) {
                 auto* rod = new RodShapedBacterium{
-                    3/1.17, 75/1.17, 0,  // x, y, z (z=0)
-                    constants::pi * 0.5, constants::pi * 0.5, // Random angle
+                    x, y, 0,  //random position x, y, z (in 2D z=0)
+                    angle,// Random angle
+                    constants::pi * 0.5, 
                     RodShapedBacterium::mAvgGrwthRate,
-                    4, // Type A property
+                    4, // Type A initial length
                     1, // if hyphal ca, 0 if yeast-locked ca
                     Candida::mRadius
                 };
@@ -212,12 +140,13 @@ std::vector<IBacterium*> initialiseBiofilm(double linking1, double linking2,
             } 
             else if (isTypeB) {
                 auto* rod = new RodShapedBacterium{
-                  -3/1.17, 75/1.17, 0,  // x, y, z (z=0)
-                    constants::pi * 0.5, constants::pi * 0.5, // Random angle
+                    x, y, 0, //random position x, y, z (in 2D z=0)
+                    angle,// Random angle
+                    constants::pi * 0.5, 
                     RodShapedBacterium::mAvgGrwthRate,
-                    3, // Type B property
+                    3, // Type B initial length
                     0, // non-chaining PA bacteria
-                    0.5
+                    0.5 //radius of the cell
                 };
                 initial_conditions.push_back(rod);
                 numTypeB--;
@@ -236,6 +165,9 @@ std::vector<IBacterium*> initialiseBiofilm(double linking1, double linking2,
     return initial_conditions;
 }
 
+//--------------------------------------------------------
+//-----reading from a file-----
+//--------------------------------------------------------
 std::vector<IBacterium*> initialiseBiofilmFromFile(double linking1, double linking2, const std::string& filename)
 {
     std::vector<IBacterium*> initial_conditions;
@@ -350,6 +282,7 @@ std::vector<IBacterium*> initialiseBiofilmFromFile(double linking1, double linki
 
     return initial_conditions;
   }
+
 int main(int argc, char const *argv[])
 {
 
@@ -381,9 +314,9 @@ int main(int argc, char const *argv[])
   }
  // else
  // {
-   // std::cout << "Expected 5 command line arguents! Received " << argc-1 << '\n';
-    //std::cout << "Example usage:\n"
-        //      << "./main.out run_dir kappa bend_rig linking_prob force_thresh" << '\n';
+   std::cout << "Expected 2 command line arguents! Received " << argc-1 << '\n';
+    std::cout << "Example usage:\n"
+             << "./main.out run_dir << '\n';
    // exit(EXIT_FAILURE);
   //}
   if ( !std::filesystem::exists(sim_out_dir) )
@@ -392,8 +325,10 @@ int main(int argc, char const *argv[])
   }
 
   sim_out_dir += "/" + run_dir + "/";
+  ///////------------------------------
   int numTypeA = 1;      // Number of ca
   int numTypeB = 1;      // Number of pa
+  ////----------------------------------
   double centerX = 0.0;   // Shared center X for mixed distribution
   double centerY = 75.0/1.17;   // Shared center Y for mixed distribution
   
