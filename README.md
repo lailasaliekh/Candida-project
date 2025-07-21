@@ -21,7 +21,7 @@ A Discrete Element Simulation of spatial oranisation of hyphal and non-hyphal Ca
 ---
 
 ## Building
-To compile the code run from the terminal
+To compile the code run from the terminal, this only compiles on Linux operating system. One needs CMake (v >= 3.16.0) for compilation and assumes g++ 9.3.0 or above.
 ```bash
 
 ./quickMake.sh
@@ -58,8 +58,9 @@ Line 207 in ```main.cpp```
 ``` C++
             if (isTypeA) {
                 auto* rod = new RodShapedBacterium{
-                    3/1.17, 75/1.17, 0,  // x, y, z (z=0)
-                    constants::pi * 0.5, constants::pi * 0.5, // Random angle
+                   x, y, 0,  //-->one can change to hard coded initial positions of the cells x, y, z (z=0)
+                    angle, // Random angle
+                    constants::pi * 0.5, 
                     RodShapedBacterium::mAvgGrwthRate,
                     4, // Type A property
                   --->  1, // if hyphal ca, 0 if yeast-locked ca
