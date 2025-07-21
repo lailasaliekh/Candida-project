@@ -58,20 +58,29 @@
 // The length scale is also set using the rod average diameter (1 micron)
 
 namespace constants
-{
+{ //-------------------- Paramters that one might need to change if needed-----------------//
+  inline constexpr double dt { 1e-7 }; // Time step in hours
+  inline constexpr double baseLengthScale{ 1.17 };   //PA cell's diameter in microns
+  inline constexpr double candidaRadius{1.18}; // CA radius in microns
+
+  // -------------------------- Chaining -------------------------------
+
+  inline constexpr double nondim_K_bend { //  this is beta (bending rigidity)
+  20
+  };
+  inline constexpr double nondim_kappa { 1}; // this is the spring constant
 
   // --------------------------- Common To All -----------------------------------
   inline constexpr double zeta{ 200 }; // drag coefficient Pa h
   inline constexpr double effective_g { 0.01 };
   inline constexpr double baseModE { 4e6 };            // Pa
-  inline constexpr double baseLengthScale{ 1.17 };        //////********!!pa diameter!!!!!!!!!****
+
   inline constexpr double surfaceModE{ 100*baseModE }; // Pa (agar effective stiffness)
 
   inline constexpr double nondim_min_z { -0.5 / baseLengthScale }; // location of agar
   inline constexpr double nondim_agar_roughness { 0.01 / baseLengthScale }; // location of agar
   inline constexpr double nondim_agar_mod_E { surfaceModE / baseModE };
   inline constexpr double baseTimeScale { zeta / baseModE };       // hours
-  inline constexpr double dt { 1e-7 }; // hours
   inline constexpr double nondim_dt { dt / baseTimeScale };
 
   // Mathematical constants
@@ -125,14 +134,6 @@ namespace constants
   inline constexpr double nondim_avg_div_radius{
     avg_div_radius / baseLengthScale
   };
-
-  // -------------------------- Chaining -------------------------------
-
-  inline constexpr double nondim_K_bend { //  this is beta
-  20
-  };
-  // inline constexpr double nondim_kappa { kappa / ( baseModE * rodSpheroDiam ) };
-  inline constexpr double nondim_kappa { 1}; // this is the spring constant
 
 // ------------------------ Candida -------------------------------
 
