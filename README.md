@@ -10,8 +10,8 @@ A C++ simulation framework for modeling spatial organisation of Candida (yeast) 
 - [Slurm Scripts](#slurm-scripts)
 - [Parameters](#parameters)
 - [Force Models](#force-models) 
-- [Simulation Structure](#simulation-structure)  
-
+- [Simulation Structure](#simulation-structure)
+- [Analysis](#analysis)
 ---
 
 ## About
