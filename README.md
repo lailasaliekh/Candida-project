@@ -43,6 +43,8 @@ For loop submitting multiple repeats
 ``` bash
 ./submit_repeats.sh <number_of_repeats>
 ```
+To allow these to be run as a program or script we use,
+``` chmod +x <script.sh> ```
 
 ## Parameters
 The initial number of cells of each type can be changed from the ```main.cpp``` file
