@@ -69,7 +69,10 @@
 #include "Candida.hpp"
 #include "constants.hpp"         // definition of constants namespace
 #include "MathUtility.hpp"       // definition of Vec3 class
-
+#include <unordered_set>
+#include <iostream>
+#include <sstream>
+#include <fstream>  // Include for file operations
 //*----------------------------------------------------------------------------------------------------
 //this is to insure we are deleting cells and if they are in a chain the links being deleted properly/////
 void removeCellsOutsideTrap(std::vector<IBacterium*> &cells, double trapYLimit) {
@@ -154,114 +157,7 @@ void removeOverlappingCells(std::vector<IBacterium*> &cells, double sepThreshold
                 cells.end());
 }
 
-
-// void removeOverlappingCells(std::vector<IBacterium*> &cells, double sepThreshold) {
-//   std::vector<IBacterium*> cellsToRemove;
-
-//   for (size_t i = 0; i < cells.size(); ++i) {
-//       for (size_t j = i + 1; j < cells.size(); ++j) {
-//           double sep;  // Separation distance
-//           Vec3 cA, cB;  // Virtual contact points
-
-//           getMinDist(cells[i], cells[j], sep, cA, cB);  // Compute separation
-
-//           Vec3 cv = cA - cB;  // Compute separation vector
-//           sep = cv.norm();  // Compute separation distance
-
-//           if (sep <= sepThreshold) {
-//               // Determine which cell to remove based on length, ID, or another property
-//               IBacterium* toDelete;
-//               IBacterium* toKeep;
-
-//               if (cells[i]->getLength() < cells[j]->getLength()) {
-//                   toDelete = cells[i];
-//                   toKeep = cells[j];
-//               } else if (cells[i]->getLength() > cells[j]->getLength()) {
-//                   toDelete = cells[j];
-//                   toKeep = cells[i];
-//               } else {
-//                   // If lengths are equal, remove the cell with the higher ID
-//                   toDelete = (cells[i]->getID() > cells[j]->getID()) ? cells[i] : cells[j];
-//                   toKeep = (cells[i]->getID() > cells[j]->getID()) ? cells[j] : cells[i];
-//               }
-
-//               std::cerr << "Deleting overlapping cell ID: " << toDelete->getID()
-//                         << " (Keeping ID: " << toKeep->getID() << ")\n";
-
-//               cellsToRemove.push_back(toDelete);
-//           }
-//       }
-//   }
-
-//   // Ensure chain integrity before removing cells
-//   for (auto& cell : cellsToRemove) {
-//       IBacterium* lowerLink = cell->getLowerLink();
-//       IBacterium* upperLink = cell->getUpperLink();
-
-//       if (lowerLink) lowerLink->setUpperLink(nullptr);
-//       if (upperLink) upperLink->setLowerLink(nullptr);
-
-//       std::cerr << "Deleted cell ID: " << cell->getID() << "\n";
-//   }
-
-//   // Remove the selected cells from the main container
-//   cells.erase(std::remove_if(cells.begin(), cells.end(),
-//                              [&cellsToRemove](IBacterium* cell) {
-//                                  return std::find(cellsToRemove.begin(), cellsToRemove.end(), cell) != cellsToRemove.end();
-//                              }),
-//               cells.end());
-// }
-//-------------------------------
-// void removeOverlappingCells(std::vector<IBacterium*> &cells, double sepThreshold) {
-//   std::vector<IBacterium*> cellsToRemove;
-
-//   // Identify overlapping cells
-//   for (size_t i = 0; i < cells.size(); ++i) {
-//       for (size_t j = i + 1; j < cells.size(); ++j) {
-//           double sep;  // Separation distance
-//           Vec3 cA, cB;  // Virtual contact points
-
-//           getMinDist(cells[i], cells[j], sep, cA, cB);  // Correct function call
-
-//           Vec3 cv = cA - cB;  // Compute separation vector
-//           sep = cv.norm();  // Compute separation distance (ensures consistency)
-
-//           if (sep <= sepThreshold) {
-//               std::cerr << "Deleting overlapping cells (sep <= " << sepThreshold << "):\n";
-//               std::cerr << "Cell A ID: " << cells[i]->getID() << " Contact Position: " << cA << "\n";
-//               std::cerr << "Cell B ID: " << cells[j]->getID() << " Contact Position: " << cB << "\n";
-//               std::cerr << "Separation vector: " << cv << "\n";
-//               std::cerr << "Separation distance: " << sep << "\n";
-
-//               cellsToRemove.push_back(cells[i]);
-//               cellsToRemove.push_back(cells[j]);
-//           }
-//       }
-//   }
-
-//   // Ensure chain integrity before removing cells
-//   for (auto& cell : cellsToRemove) {
-//       IBacterium* lowerLink = cell->getLowerLink();
-//       IBacterium* upperLink = cell->getUpperLink();
-
-//       if (lowerLink) lowerLink->setUpperLink(nullptr);
-//       if (upperLink) upperLink->setLowerLink(nullptr);
-
-//       std::cerr << "Deleted cell ID: " << cell->getID() << "\n";
-//   }
-
-//   // Remove the overlapping cells from the main container
-//   cells.erase(std::remove_if(cells.begin(), cells.end(),
-//                              [&cellsToRemove](IBacterium* cell) {
-//                                  return std::find(cellsToRemove.begin(), cellsToRemove.end(), cell) != cellsToRemove.end();
-//                              }),
-//               cells.end());
-// }
-
-
-//-----------------------------------------------!!>>>>><<<<
-
-
+//-----------------------------------------------
 //*to use it for cells and walls closest contact point */
 //-----------------------------------------------//
 Vec3 closestPointOnRodToVerticalWall(const IBacterium* cell, double wallX) {
@@ -325,36 +221,6 @@ void interactTrapWall(IBacterium *cell, double wallY, bool isLowerWall, double w
     }
     // Handle vertical walls (left at trapStartX, right at trapEndX)
     if (!isLowerWall) {
-      // // Left vertical wall at trapStartX
-      // double left_sep = fabs(poles[ii].x - trapStartX);  // Distance from left vertical wall
-      // double left_overlap = std::max(cell->getRadius() - left_sep, 0.0);
-      // if (left_overlap > 0 && poles[ii].y >= wallY) {  // Ensure it acts only above the upper wall
-      //   double force_mag = Estar * left_overlap * sqrt(Rstar * left_overlap);
-      //   //Vec3 force((poles[ii].x < trapStartX ? force_mag : -force_mag), 0, 0);  // Force direction in x-axis
-      //   Vec3 force(force_mag, 0, 0); // Always push right
-      //   cell->addForce(force);
-
-      //   Vec3 force_pos = Vec3(trapStartX, poles[ii].y, 0);  // Position of left wall
-      //   Vec3 torque = cross(force_pos - cell->getPos(), force);
-      //   cell->addTorque(torque);
-      // }
-
-      // // Right vertical wall at trapEndX
-      // double right_sep = fabs(poles[ii].x - trapEndX);  // Distance from right vertical wall
-      // double right_overlap = std::max(cell->getRadius() - right_sep, 0.0);
-      // if (right_overlap > 0 && poles[ii].y >= wallY) {  // Ensure it acts only above the upper wall
-      //   double force_mag = Estar * right_overlap * sqrt(Rstar * right_overlap);
-      //   Vec3 force(-force_mag, 0, 0); // Always push left
-      //   //Vec3 force((poles[ii].x > trapEndX ? -force_mag : force_mag), 0, 0);  // Force direction in x-axis
-      //   cell->addForce(force);
-
-      //   Vec3 force_pos = Vec3(trapEndX, poles[ii].y, 0);  // Position of right wall
-      //   Vec3 torque = cross(force_pos - cell->getPos(), force);
-      //   cell->addTorque(torque);
-      // }
-
-
-      //--------------- new logic-----------------
       // Left vertical wall interaction
       Vec3 closestPointLeft = closestPointOnRodToVerticalWall(cell, trapStartX);
       double left_sep = fabs(closestPointLeft.x - trapStartX);
@@ -427,10 +293,7 @@ void interactMultiWallWithTrap(IBacterium *cell, double yMin, double yMax, int l
     interactTrapWall(cell, yMax, false, wallHertzianConstant * totalForceMultiplier, trapStartX, trapEndX, trapHeight);
   }
 }
-#include <unordered_set>
-#include <iostream>
-#include <sstream>
-#include <fstream>  // Include for file operations
+
 
 void polyInteractParticles(std::vector<IBacterium*> &pars) {
     double yMin = -100000.0;  // Minimum y-boundary
@@ -438,7 +301,7 @@ void polyInteractParticles(std::vector<IBacterium*> &pars) {
     int wallLayers = 10;  // Number of wall layers on each side
     double trapStartX = -75.0 / 1.17;  // Start of the trap region
     double trapEndX = 75.0 / 1.17;     // End of the trap region
-    double trapHeight = 150.0 / 1.17;  // Height of the trap from the original upper wall
+    double trapHeight = 150.0 / 1.17;  // Height of the trap from the original upper wall (these are all scaled by the PA cell's diameter)
 
 
     // Remove trapped cells before interactions
