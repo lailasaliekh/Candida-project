@@ -8,12 +8,15 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import argparse
 import networkx as nx
+import math
 from scipy.optimize import curve_fit
+
+#importing defined modules/functions
 from RodShapedBacteria import RodShapedBacterium
 from findCriticalLengthProb import getCells
 import utilities as ut
 import fastCellPlotting as fcp
-import math
+
 from collections import defaultdict
 ut.setMPL()
 
@@ -71,11 +74,11 @@ def plot_counts_over_time(data_dir, save_path=None, output_dir=DEFAULT_OUTPUT_DI
         if len(ca_mutant_counts) == len(time_steps):
             plt.plot(time_steps, ca_mutant_counts, 'o', color='#9e003a', label="CA Mutant")
         else:
-            print("⚠️ Length mismatch: ca_mutant_counts")
+            print("Length mismatch: ca_mutant_counts")
         if len(pseudomonas_counts) == len(time_steps):
             plt.plot(time_steps, pseudomonas_counts, 's', color='cyan', label="PA-SA")
         else:
-            print("⚠️ Length mismatch: pseudomonas_counts")
+            print("Length mismatch: pseudomonas_counts")
 
     elif is_ca and is_pa:
         if len(candida_counts) == len(time_steps):
@@ -86,19 +89,19 @@ def plot_counts_over_time(data_dir, save_path=None, output_dir=DEFAULT_OUTPUT_DI
         if len(candida_counts) == len(time_steps):
             plt.plot(time_steps, candida_counts, 'o', color='red', label="CA Hyphal")
         else:
-            print("⚠️ Length mismatch: candida_counts")
+            print(" Length mismatch: candida_counts")
     elif is_pa and not is_cam and not is_ca:
         if len(pseudomonas_counts) == len(time_steps):
             plt.plot(time_steps, pseudomonas_counts, 's', color='cyan', label="PA-SA")
         else:
-            print("⚠️ Length mismatch: pseudomonas_counts")
+            print(" Length mismatch: pseudomonas_counts")
     elif is_cam and not is_ca and not is_pa:
         if len(ca_mutant_counts) == len(time_steps):
             plt.plot(time_steps, ca_mutant_counts, 'o', color='#9e003a', label="CA Mutant")
         else:
-            print("⚠️ Length mismatch: ca_mutant_counts")
+            print(" Length mismatch: ca_mutant_counts")
     else:
-        print("⚠️ Plot skipped: unknown or unsupported combination of conditions.")
+        print(" Plot skipped: unknown or unsupported combination of conditions.")
 
     plt.xlabel("Time (h)")
     plt.ylabel("Cell/Segment Count")
@@ -228,7 +231,7 @@ def plot_average_counts_over_repeats(parent_dir, output_dir=DEFAULT_OUTPUT_DIR):
             plt.errorbar(sorted_times, avg_pseudomonas, yerr=sem_pseudomonas, fmt='s', color='cyan', label="PA-SA")
 
     else:
-        print("⚠️ Plot skipped: unknown or unsupported combination of conditions.")
+        print("Plot skipped: unknown or unsupported combination of conditions.")
 
     # if is_cam and is_ca:
     #     plt.errorbar(sorted_times, avg_ca_hyphal, yerr=sem_ca_hyphal, fmt='o', color='red', label="CA Hyphal")
@@ -1061,7 +1064,12 @@ def main():
         # plot_average_counts_over_repeats(args.parent_dir, output_dir)
         # plot_chain_growth(args.parent_dir, output_dir)
         # plot_kymograph_average(args.parent_dir, output_dir)
+        
+        #----------------------------------------------------------------------------
+        # this is what we mainly need!!!
         compute_kymograph_average_without_zerosfilling(args.parent_dir, output_dir)
+        #----------------------------------------------------------------------------
+    
         # plot_average_counts_over_repeats_without_zerosfilling(args.parent_dir, output_dir)
         # plot_chain_growth_without_zero_padding(args.parent_dir, output_dir)
         # plot_cells_grid(args.parent_dir, None, args.num_snapshots, output_dir) 
