@@ -68,6 +68,7 @@ double mRadius    { 0.5*constants::nondim_rodSpheroDiam };
 double RodShapedBacterium::mRodModE   { constants::nondim_rodModE };
 double RodShapedBacterium::mAvgDivLen { constants::nondim_avg_div_L };
 double RodShapedBacterium::mAvgGrwthRate { constants::nondim_rodGrwthRtePreFac };
+double RodShapedBacterium::mHyphalGrowthRateMultiplier { 0.6 };
 
 #if defined(CHAINING)
 double RodShapedBacterium::mKappa { constants::nondim_kappa };   //!< Spring tension

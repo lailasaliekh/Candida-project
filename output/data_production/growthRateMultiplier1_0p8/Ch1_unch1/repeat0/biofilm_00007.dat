@@ -1,0 +1,6 @@
+cell_type	cell_id	length	radius	pos_x	pos_y	pos_z	ori_x	ori_y	ori_z	lower_link	upper_link
+ChainingRodShaped	10	2.33026	0.5	-28.7779	30.9693	0	0.397824	-0.917462	0	None	None
+ChainingRodShaped	6	4.37347	0.5	1.33913	43.2764	0	-0.888927	-0.458049	0	7	None
+ChainingRodShaped	7	3.03314	0.5	5.51977	45.4306	0	-0.888927	-0.458049	0	None	6
+ChainingRodShaped	9	3.54183	0.5	-30.352	36.6165	0	0.515881	-0.85666	0	None	None
+ChainingRodShaped	11	2.26693	0.5	-30.0891	33.9905	0	0.414278	-0.91015	0	None	None

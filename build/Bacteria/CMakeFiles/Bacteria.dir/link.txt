@@ -1,0 +1,2 @@
+/Library/Developer/CommandLineTools/usr/bin/ar qc libBacteria.a CMakeFiles/Bacteria.dir/source/RodShapedBacteria.cpp.o CMakeFiles/Bacteria.dir/source/SphericalBacteria.cpp.o CMakeFiles/Bacteria.dir/source/Candida.cpp.o CMakeFiles/Bacteria.dir/source/Divisions.cpp.o
+/Library/Developer/CommandLineTools/usr/bin/ranlib libBacteria.a

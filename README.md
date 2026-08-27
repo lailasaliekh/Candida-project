@@ -31,27 +31,31 @@ Remember to recompile once changing the hard-coded parameters
 ## Running Simulation
 From the terminal 
 ```bash
-.build/Main/main.out <output_dir>
+./build/Main/main.out <output_dir> [growthRateMultiplier1]
+./build/Main/main.out <output_dir> [growthRateMultiplier1] [numTypeA] [numTypeB]
 ```
 
 ## Slurm Scripts
 In order to submit jobs to the slurm cluster we can either use the following, 
 for a single parameter set submission
 ``` bash
-sbatch one_job.sh <repeat_number>
+./one_job.sh <repeat_number> [growthRateMultiplier1] [num_ca] [num_pa] [partition] [cpus] [mem] [time] [base_dir] [output_root] [log_dir]
 ```
 For loop submitting multiple repeats
 ``` bash
-./submit_repeats.sh <number_of_repeats>
+./submit_repeats.sh <number_of_repeats> [growthRateMultiplier1] [num_ca] [num_pa] [partition] [cpus] [mem] [time] [base_dir] [output_root] [log_dir]
+```
+For a sweep over `growthRateMultiplier1 = 0, 0.5, 1.0` with `50` Candida and `50` PA cells
+``` bash
+./submit_growthrate_sweep.sh <number_of_repeats> [partition] [cpus] [mem] [time] [base_dir] [output_root] [log_dir]
 ```
 To allow these to be run as a program or script we use,
 ``` chmod +x <script.sh> ```
 
 ## Parameters
-The initial number of cells of each type can be changed from the ```main.cpp``` file
-``` C++
-  int numTypeA = 1;      // Number of ca
-  int numTypeB = 1;      // Number of pa
+The initial number of cells of each type can now also be changed from the command line:
+```bash
+./build/Main/main.out test/repeat0/ 0.6 3 2
 ```
 To change the type of candida from hyphal to non-hyphal (yeast-locked), we simply change the linking probability in:
 Line 207 in ```main.cpp```
@@ -70,4 +74,3 @@ Line 207 in ```main.cpp```
                 numTypeA--;
             }
 ```
-

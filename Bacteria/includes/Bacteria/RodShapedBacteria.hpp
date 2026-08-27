@@ -104,6 +104,7 @@ public:
   /*---------------------- Set cell hyperparmeters ---------------------------*/
 
   static double mAvgGrwthRate;      //!< average growth rate for all cells
+  static double mHyphalGrowthRateMultiplier; //!< runtime multiplier for hyphal growth after division
   double mGrwthRtePreFac;           //!< cellular growth rate prefactor
   static double mAvgDivLen;         //!< average division length
   static double mRodModE;           //!< proportional to Young's modulus

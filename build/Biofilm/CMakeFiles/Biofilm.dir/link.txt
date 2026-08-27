@@ -1,0 +1,2 @@
+/Library/Developer/CommandLineTools/usr/bin/ar qc libBiofilm.a CMakeFiles/Biofilm.dir/source/PolyBiofilm.cpp.o
+/Library/Developer/CommandLineTools/usr/bin/ranlib libBiofilm.a

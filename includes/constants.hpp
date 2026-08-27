@@ -140,7 +140,7 @@ namespace constants
   // Dimensional
   inline constexpr double candidaGrwthRtePreFac {4.0};       // microns / hour
   inline constexpr double candidaModE{ baseModE };            // Pa
-  inline constexpr double candidaRadius{1.18}; // microns
+  // candidaRadius is defined with the other tunable parameters at the top
   inline constexpr double candidaAvgDivLen{ 7.0 };            // microns
 
   // Non-dimensional

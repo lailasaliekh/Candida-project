@@ -19,4 +19,4 @@ cmake ..
 echo "== Making =="
 make -j $NUM_THREADS
 
-echo "Run with the following command from the build directory: ./Main/main.out test/repeat0/ 1 1 0 1 4 2e-4"
+echo "Run with the following command from the build directory: ./Main/main.out test/repeat0/ 0.6 1 1"

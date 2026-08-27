@@ -186,9 +186,15 @@ void RodShapedBacterium::divide(std::vector<IBacterium*>& cell_list)
   Vec3 rcm_2{
     mPos - quarter_full_length * getOrientation()
   };
-  // Adjust growth rate if linking probability is 1
-  double growthRateMultiplier1 = (mLinkingProb == 1.0) ? 0.6 : 1.0; //the condition to change the growth rate for hyphal CA only
+  // Use the user-configurable multiplier for any chaining-enabled cell and
+  // keep the radius-based fallback for non-linking Candida cells.
+  double growthRateMultiplier1 = (mLinkingProb > 0.0)
+    ? RodShapedBacterium::mHyphalGrowthRateMultiplier
+    : 1.0;
   double growthRateMultiplier2 = (mRadius >= 1.0) ? 0.6 : 1.0; // for any CA type
+  double growthRateMultiplier = (mLinkingProb > 0.0)
+    ? growthRateMultiplier1
+    : growthRateMultiplier2;
   double divlengthRateMultiplier = (mRadius == 2.05983) ? 6 : 1.0; // for hyphal candida which is big
   *this = RodShapedBacterium
   {
@@ -203,8 +209,8 @@ void RodShapedBacterium::divide(std::vector<IBacterium*>& cell_list)
 #endif
 
     gen_rand.getUniformRand(
-      mAvgGrwthRate*0.5*growthRateMultiplier2,
-      mAvgGrwthRate*1.5*growthRateMultiplier2
+      mAvgGrwthRate*0.5*growthRateMultiplier,
+      mAvgGrwthRate*1.5*growthRateMultiplier
     ),
     0.5*divlengthRateMultiplier*(mAvgDivLen-2*mRadius),
     mLinkingProb,mRadius
@@ -223,8 +229,8 @@ void RodShapedBacterium::divide(std::vector<IBacterium*>& cell_list)
                               mAngles.y+1e-3*constants::pi),
 #endif
       gen_rand.getUniformRand(
-        mAvgGrwthRate*0.5*growthRateMultiplier2,
-        mAvgGrwthRate*1.5*growthRateMultiplier2
+        mAvgGrwthRate*0.5*growthRateMultiplier,
+        mAvgGrwthRate*1.5*growthRateMultiplier
       ),
       0.5*divlengthRateMultiplier*(mAvgDivLen-2*mRadius),
        mLinkingProb, mRadius
@@ -338,6 +344,4 @@ void Candida::divide(std::vector<IBacterium*>& cell_list)
     }
 #endif
 }
-
-
 
